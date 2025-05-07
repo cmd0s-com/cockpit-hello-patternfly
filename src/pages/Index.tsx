@@ -25,7 +25,6 @@ const Index = () => {
 
   useEffect(() => {
     // This is a demonstration of how to use cockpit.js
-    // In a real project, you would add cockpit as a dependency and import it
     if (window.cockpit) {
       try {
         window.cockpit.file('/etc/hostname').read()
