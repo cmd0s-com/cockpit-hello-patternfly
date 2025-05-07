@@ -9,26 +9,28 @@ import {
   TextContent, 
   Text, 
   Title, 
-  Gallery, 
-  GalleryItem,
-  Spinner,
   EmptyState,
   EmptyStateIcon,
-  EmptyStateBody
+  EmptyStateBody,
+  Spinner
 } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 
 const Index = () => {
-  const [hostname, setHostname] = useState<string>("");
+  const [hostname, setHostname] = useState<string>("unknown");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // This is a demonstration of how to use cockpit.js
-    if (window.cockpit) {
+    console.log("Component mounted");
+    
+    // Check if cockpit is available
+    if (typeof window.cockpit !== 'undefined') {
+      console.log("Cockpit API available");
       try {
         window.cockpit.file('/etc/hostname').read()
           .then((content: string) => {
+            console.log("Hostname read:", content);
             setHostname(content.trim());
             setLoading(false);
           })
@@ -53,9 +55,11 @@ const Index = () => {
   }, []);
 
   const runCommand = () => {
-    if (window.cockpit) {
+    if (typeof window.cockpit !== 'undefined') {
+      console.log("Running command: uname -a");
       const cmd = window.cockpit.spawn(['uname', '-a']);
       cmd.done((data: string) => {
+        console.log("Command output:", data);
         alert(`Command output: ${data}`);
       }).fail((ex: any) => {
         console.error('Failed to run command', ex);
@@ -92,37 +96,17 @@ const Index = () => {
         <Text>Welcome to your Cockpit plugin. This is a simple demonstration of how to create a Cockpit plugin.</Text>
       </TextContent>
       
-      <Gallery hasGutter style={{ marginTop: '2rem' }}>
-        <GalleryItem>
-          <Card>
-            <CardTitle>System Information</CardTitle>
-            <CardBody>
-              <TextContent>
-                <Text component="h3">Hostname: {hostname}</Text>
-                <Button variant="primary" onClick={runCommand}>
-                  Run uname -a
-                </Button>
-              </TextContent>
-            </CardBody>
-          </Card>
-        </GalleryItem>
-        
-        <GalleryItem>
-          <Card>
-            <CardTitle>About This Plugin</CardTitle>
-            <CardBody>
-              <TextContent>
-                <Text>This plugin demonstrates basic integration with Cockpit:</Text>
-                <ul>
-                  <li>Reading system files</li>
-                  <li>Running system commands</li>
-                  <li>Using PatternFly 5 components</li>
-                </ul>
-              </TextContent>
-            </CardBody>
-          </Card>
-        </GalleryItem>
-      </Gallery>
+      <Card style={{ marginTop: '2rem' }}>
+        <CardTitle>System Information</CardTitle>
+        <CardBody>
+          <TextContent>
+            <Text component="h3">Hostname: {hostname}</Text>
+            <Button variant="primary" onClick={runCommand}>
+              Run uname -a
+            </Button>
+          </TextContent>
+        </CardBody>
+      </Card>
     </PageSection>
   );
 };
