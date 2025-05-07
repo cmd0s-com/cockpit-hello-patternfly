@@ -1,73 +1,102 @@
-# Welcome to your Lovable project
 
-## Project info
+# Cockpit Hello World Plugin
 
-**URL**: https://lovable.dev/projects/549685dd-19aa-45ee-917f-eb7c6e7ec757
+A simple Hello World plugin for Cockpit Project using PatternFly 5.
 
-## How can I edit this code?
+## Overview
 
-There are several ways of editing your application.
+This plugin demonstrates how to create a basic Cockpit plugin with:
+- PatternFly 5 UI components
+- System information display
+- Command execution capabilities
 
-**Use Lovable**
+## Installation on Ubuntu 24.04 LTS
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/549685dd-19aa-45ee-917f-eb7c6e7ec757) and start prompting.
+Follow these steps to install and run the plugin on Ubuntu 24.04 LTS:
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+1. Install Cockpit if not already installed:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+sudo apt update
+sudo apt install -y cockpit
+sudo systemctl enable --now cockpit.socket
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. Install Node.js and npm:
 
-Follow these steps:
+```bash
+sudo apt install -y nodejs npm
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Building and Installing the Plugin
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Clone the repository:
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+git clone https://github.com/YOUR-USERNAME/cockpit-hello-world.git
+cd cockpit-hello-world
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Build the plugin:
+
+```bash
+npm run build
+```
+
+4. Create a directory for the plugin in Cockpit's package directory:
+
+```bash
+sudo mkdir -p /usr/share/cockpit/hello-world
+```
+
+5. Copy the built files to the Cockpit packages directory:
+
+```bash
+sudo cp -r dist/* /usr/share/cockpit/hello-world/
+```
+
+6. Make sure the manifest.json file is properly set up in the root of your plugin directory:
+
+```bash
+sudo cp dist/manifest.json /usr/share/cockpit/hello-world/
+```
+
+7. Restart Cockpit:
+
+```bash
+sudo systemctl restart cockpit
+```
+
+### Accessing the Plugin
+
+1. Open a web browser and go to: `https://your-server-ip:9090`
+2. Log in with your system credentials
+3. You should see a "Hello World" entry in the Cockpit menu
+
+## Development
+
+For development purposes, you can use:
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Note that some Cockpit-specific features may not work in the development environment since they require the Cockpit runtime.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Troubleshooting
 
-**Use GitHub Codespaces**
+- If the plugin doesn't appear in the menu, check if the manifest.json file is correctly placed in the plugin directory
+- Verify file permissions: `sudo chmod -R 755 /usr/share/cockpit/hello-world/`
+- Check Cockpit logs: `journalctl -u cockpit`
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## License
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/549685dd-19aa-45ee-917f-eb7c6e7ec757) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project is licensed under the MIT License - see the LICENSE file for details.
