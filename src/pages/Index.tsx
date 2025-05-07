@@ -45,6 +45,7 @@ const Index = () => {
       }
     } else {
       // For development outside of Cockpit
+      console.log("Cockpit API not available, using example hostname");
       setTimeout(() => {
         setHostname('example-hostname');
         setLoading(false);
